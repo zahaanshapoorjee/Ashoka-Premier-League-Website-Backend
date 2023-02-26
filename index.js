@@ -47,7 +47,7 @@ app.get('/', async (req,res)=>{
     const getRows = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId,
-        range: 'Test'
+        range: 'Players'
     })
 
     res.send(getRows.data);
