@@ -43,11 +43,17 @@ app.post('/', async (req, res) =>{
         range: "PLAYERTESTSHEET",
         valueInputOption: "USER_ENTERED",
         resource: {
-          values: [[req.body.firstname, req.body.middlename, req.body.lastname, req.body.batch, req.body.phonenumber, req.body.gender, req.body.position1, req.body.position2, req.body.comments]],
+          values: [[req.body.firstname, 
+            req.body.middlename, 
+            req.body.lastname, 
+            req.body.batch, 
+            req.body.phonenumber, 
+            req.body.gender, 
+            req.body.position1, 
+            req.body.position2,
+            req.body.comments]],
         },
       });
-      res.send(req.body);
-
 
 } )
 
