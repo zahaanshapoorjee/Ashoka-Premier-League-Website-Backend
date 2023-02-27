@@ -4,30 +4,46 @@ const cors = require('cors');
 const bodyParser = require('body-parser')
 
 const app = express();
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(cors());
 
 const spreadsheetId = '1E6iMfg7OmKf-39mIfpm6oGcGSogJAABad_bjTihh-Qg';
 
-app.get('/', async (req,res)=>{
+app.get('/seasons/apl5/players', async (req,res)=>{
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
         scopes: 'https://www.googleapis.com/auth/spreadsheets'
     })
     const client = await auth.getClient();
     const googleSheets = google.sheets({version: 'v4', auth: client});
-    const MetaData = await googleSheets.spreadsheets.get({
-
-        auth,
-        spreadsheetId
-
-    })
-    const getRows = await googleSheets.spreadsheets.values.get({
+    const PlayerData = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId,
-        range: 'Players'
+        range: 'IMAGE'
     })
-    res.send(getRows.data);
+    res.send(PlayerData.data);
+})
+
+app.post('/seasons/apl5/players', async (req,res)=>{
+
+    const auth= new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({version: 'v4', auth: client});
+    await googleSheets.spreadsheets.values.append({
+        spreadsheetId: spreadsheetId,
+        range: "IMAGE",
+        valueInputOption: "USER_ENTERED",
+        resource: {
+            values: [[
+                req.body.image,
+                req.body.name
+            ]]
+        }
+    });
+    console.log(res)
 })
 
 app.post('/', async (req, res) =>{
