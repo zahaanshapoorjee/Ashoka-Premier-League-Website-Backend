@@ -19,7 +19,7 @@ app.get('/seasons/apl5/players', async (req,res)=>{
     const PlayerData = await googleSheets.spreadsheets.values.get({
         auth,
         spreadsheetId,
-        range: 'IMAGE'
+        range: 'Players'
     })
     res.send(PlayerData.data);
 })
@@ -46,7 +46,7 @@ app.post('/seasons/apl5/players', async (req,res)=>{
     console.log(res)
 })
 
-app.post('/', async (req, res) =>{
+app.post('/registration/player', async (req, res) =>{
 
     const auth = new google.auth.GoogleAuth({
         keyFile: 'credentials.json',
@@ -59,18 +59,22 @@ app.post('/', async (req, res) =>{
         range: "PLAYERTESTSHEET",
         valueInputOption: "USER_ENTERED",
         resource: {
-          values: [[req.body.firstname, 
-            req.body.middlename, 
-            req.body.lastname, 
-            req.body.batch, 
-            req.body.phonenumber, 
-            req.body.gender, 
-            req.body.position1, 
-            req.body.position2,
-            req.body.comments]],
+            // image, firstname, middlename, lastname, emailid, batch, phone, gender, primarypos, secondpos, comment
+            values: [[
+                req.body.image,
+                req.body.firstname, 
+                req.body.middlename, 
+                req.body.lastname, 
+                req.body.emailid,
+                req.body.batch, 
+                req.body.phonenumber, 
+                req.body.gender, 
+                req.body.primarypos,
+                req.body.secondpos,
+                req.body.comment
+            ]],
         },
       });
-
 } )
 
 app.listen(3001, (req,res)=>{
