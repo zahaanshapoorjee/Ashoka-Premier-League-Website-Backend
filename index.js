@@ -24,6 +24,21 @@ app.get('/seasons/apl5/players', async (req,res)=>{
     res.send(PlayerData.data);
 })
 
+app.get('/registration/player', async(req,res)=>{
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({version: 'v4', auth: client});
+    const RegisteredPlayersEmailData = await googleSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId,
+        range: 'PLAYERTESTSHEET!E2:E200'
+    })
+    res.send(RegisteredPlayersEmailData.data);
+})
+
 app.post('/seasons/apl5/players', async (req,res)=>{
 
     const auth= new google.auth.GoogleAuth({
@@ -45,6 +60,8 @@ app.post('/seasons/apl5/players', async (req,res)=>{
     });
     console.log(res)
 })
+
+
 
 app.post('/registration/player', async (req, res) =>{
 
